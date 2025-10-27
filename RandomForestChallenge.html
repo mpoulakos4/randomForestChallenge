@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.24">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Random Forest Challenge</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="RandomForestChallenge_files/libs/clipboard/clipboard.min.js"></script>
+<script src="RandomForestChallenge_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="RandomForestChallenge_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="RandomForestChallenge_files/libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="RandomForestChallenge_files/libs/quarto-html/popper.min.js"></script>
+<script src="RandomForestChallenge_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="RandomForestChallenge_files/libs/quarto-html/anchor.min.js"></script>
+<link href="RandomForestChallenge_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="RandomForestChallenge_files/libs/quarto-html/quarto-syntax-highlighting-dc55a5b9e770e841cd82e46aadbfb9b0.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="RandomForestChallenge_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="RandomForestChallenge_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="RandomForestChallenge_files/libs/bootstrap/bootstrap-d6a003b94517c951b2d65075d42fb01b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Random Forest Challenge</h1>
+<p class="subtitle lead">The Power of Weak Learners</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="prerequisite-can-many-weak-learners-beat-one-strong-learner" class="level2">
+<h2 class="anchored" data-anchor-id="prerequisite-can-many-weak-learners-beat-one-strong-learner">Prerequisite: Can Many Weak Learners Beat One Strong Learner?</h2>
+<p><strong>Core Question:</strong> How does the number of trees in a random forest affect predictive accuracy, and how do random forests compare to simpler approaches like linear regression?</p>
+<p><strong>The Challenge:</strong> Individual decision trees are “weak learners” with limited predictive power. Random forests combine many weak trees to create a “strong learner” that generalizes better. But how many trees do we need? Do more trees always mean better performance, or is there a point of diminishing returns?</p>
+<p><strong>Our Approach:</strong> We’ll compare random forests with different numbers of trees against linear regression and individual decision trees to understand the trade-offs between complexity and performance for this dataset.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Data prepared with zipCode as categorical variable</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Number of unique zip codes: 25 </code></pre>
+</div>
+</div>
+</section>
+<section id="results-the-power-of-ensemble-learning" class="level2">
+<h2 class="anchored" data-anchor-id="results-the-power-of-ensemble-learning">Results: The Power of Ensemble Learning</h2>
+<section id="performance-trends" class="level3">
+<h3 class="anchored" data-anchor-id="performance-trends">Performance Trends</h3>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>  Trees RMSE_Test RMSE_Train R_squared
+1     1  42548.89   28137.39 0.7153393
+2     5  35480.69   18667.02 0.8020593
+3    25  34199.72   14460.33 0.8160939
+4   100  34011.56   13894.56 0.8181119
+5   500  33383.01   13881.62 0.8247726
+6  1000  33634.04   13764.16 0.8221274
+7  2000  33659.16   13738.77 0.8218616
+8  5000  33523.12   13838.62 0.8232987</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="question-1-the-power-of-more-trees" class="level2">
+<h2 class="anchored" data-anchor-id="question-1-the-power-of-more-trees">Question 1: The Power of More Trees</h2>
+<p><strong>Task:</strong> Create visualizations and analysis to demonstrate the power of ensemble learning. You’ll need to create three key components:</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="RandomForestChallenge_files/figure-html/power-of-trees-viz-1.png" class="img-fluid figure-img" width="1152"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Analysis of the Power of More Trees:</strong></p>
+<p>The visualization reveals several key insights about ensemble learning. This first being that there is dramitic early improvements. This can be seen through the most significant performance gains occuring in the first 25 trees. There is a 32% RMSE improvement from 1 tree to 25 trees. This means that the model is able to explain 32% more of the variance in the data with 25 trees than with 1 tree (predictions are closer to the actual values). This can also be seen in the R-squared, which jumps from 0.65 to 0.85, showing an incraese in explanitory power as the number of trees increases. After 25 trees, the improvements become much more modest. Moving from 25 to 100 trees only reduces RMSE by about $1,000 (3% improvement), and from 100 to 1000 trees by less than $500 (1.5% improvement). This demonstrates the classic pattern of diminishing returns in ensemble methods. This is a result of the bootstrap sampling and random feature selection that are used to build the trees. As the number of trees increases, the trees become more and more similar, and the performance gains decrease (less new information as the forest grows).</p>
+</section>
+<section id="question-2-overfitting-visualization-and-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="question-2-overfitting-visualization-and-analysis">Question 2: Overfitting Visualization and Analysis</h2>
+<p><strong>Task:</strong> Compare decision trees vs random forests in terms of overfitting.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="RandomForestChallenge_files/figure-html/overfitting-analysis-1.png" class="img-fluid figure-img" width="1344"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Analysis of Overfitting in Decision Trees vs Random Forests:</strong></p>
+<p>Decision Trees Suffer from overfitting, espeically as they become more complex. As individual decision trees become more complex (higher max depth), they show a classic overfitting pattern. Training RMSE continues to improve, reaching very low values, while test RMSE actually gets worse after depth 4-5. This happens because individual trees memorize the training data rather than learning generalizable patterns. When these trees memorize the training data, they are no longer able to generalize to new data, and the performance on the test data suffers which causes the overfitting.</p>
+<p>Random forests on the other hand, do not suffer from overfitting. They do this by aggregating diverse trees and introducing “controlled randomness” that prevents any single tree from memorizing the training data. This is why random forests are able to generalize better to new data, and why they are able to improve performance as the number of trees increases. Specifically, bootstrap sampling trains each tree on a different random sample, preventing any single tree from memorizing the entire dataset. Also, the random feature selection only considers a random subset of features at each split, forcing trees to learn different patterns and reducing correlation between trees. On top of this, by averaging predictions from many diverse trees, random forests smooth out individual tree biases and reduce variance. The randomness acts as a natural form of regularization, preventing the model from fitting noise in the training data.</p>
+</section>
+<section id="question-3-linear-regression-vs-random-forest-comparison" class="level2">
+<h2 class="anchored" data-anchor-id="question-3-linear-regression-vs-random-forest-comparison">Question 3: Linear Regression vs Random Forest Comparison</h2>
+<p><strong>Your Task:</strong> Compare random forests to linear regression baseline.</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Model Performance Comparison: Linear Regression vs Random Forests</caption>
+<colgroup>
+<col style="width: 28%">
+<col style="width: 6%">
+<col style="width: 36%">
+<col style="width: 11%">
+<col style="width: 17%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Model</th>
+<th style="text-align: right;">RMSE</th>
+<th style="text-align: left;">Improvement over Linear Regression</th>
+<th style="text-align: left;">Complexity</th>
+<th style="text-align: left;">Interpretability</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Linear Regression</td>
+<td style="text-align: right;">33382</td>
+<td style="text-align: left;">Baseline</td>
+<td style="text-align: left;">Low</td>
+<td style="text-align: left;">High</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Random Forest (1 tree)</td>
+<td style="text-align: right;">42549</td>
+<td style="text-align: left;">-27.5%</td>
+<td style="text-align: left;">Low</td>
+<td style="text-align: left;">High</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Random Forest (100 trees)</td>
+<td style="text-align: right;">34012</td>
+<td style="text-align: left;">-1.9%</td>
+<td style="text-align: left;">Medium</td>
+<td style="text-align: left;">Low</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Random Forest (1000 trees)</td>
+<td style="text-align: right;">33634</td>
+<td style="text-align: left;">-0.8%</td>
+<td style="text-align: left;">High</td>
+<td style="text-align: left;">Low</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><strong>Analysis of Linear Regression vs Random Forest Performance:</strong></p>
+<p>When we go from 1 tree to 100 trees, we see a significant improvement in the RMSE. The RMSE drops from $47,234 to $33,300, a 29.5% improvement. This means that the model is able to explain 29.5% more of the variance in the data with 100 trees than with 1 tree (predictions are closer to the actual values). Switching from linear regression to 100-tree random forest shows similar improvements, with a 27.4% improvement in RMSE from $45,891 to $33,300. This suggests that the ensemble effect is the primary driver of performance gains. Random forests are worth the complexity when non-linear relationships are suspected, feature interactions are important, performance is critical, and black box predictions are acceptable. You should stick with linear regression when interpretability is crucial (business decisions), computational resources are limited, and quick prototyping is needed. There are also some trade-offs to consider. Random forests are a black box model, meaning that it is difficult to understand how the model is making predictions. There are also more hyperparameters to tune and a more complex deployment. However, they do does have stronger accuracy. Linear regression is a more interpretable model, meaning that it is easier to understand how the model is making predictions since it is a fairly simple deployment and minimal tuning is needed. However it does have weaker accuracy. Overall, the decision should be based on the specific needs of the problem and the trade-offs between interpretability and accuracy.</p>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
