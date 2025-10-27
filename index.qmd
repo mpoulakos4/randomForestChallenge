@@ -4,59 +4,22 @@ subtitle: "The Power of Weak Learners"
 format:
   html: default
 execute:
-  echo: true
+  echo: false
   eval: true
 ---
 
-# 🌲 Random Forest Challenge - The Power of Weak Learners
-
-::: {.callout-important}
-## 📊 Challenge Requirements In [Student Analysis Section](#student-analysis-section)
-
-Navigate to the [Student Analysis Section](#student-analysis-section) to see the challenge requirements.
-
-:::
-
-::: {.callout-important}
-## 🎯 Note on Python Usage
-
-You have not been coached through setting up a Python environment.  **If using Python** You will need to set up a Python environment and install the necessary packages to run this code - takes about 15 minutes; see [https://quarto.org/docs/projects/virtual-environments.html](https://quarto.org/docs/projects/virtual-environments.html).  Alternatively, delete the Python code and only leave the remaining R code that is provided.  You can see the executed Python output at my GitHub pages site: [https://flyaflya.github.io/randomForestChallenge/](https://flyaflya.github.io/randomForestChallenge/).
-
-:::
-
-## The Problem: Can Many Weak Learners Beat One Strong Learner?
+## Prerequisite: Can Many Weak Learners Beat One Strong Learner?
 
 **Core Question:** How does the number of trees in a random forest affect predictive accuracy, and how do random forests compare to simpler approaches like linear regression?
 
 **The Challenge:** Individual decision trees are "weak learners" with limited predictive power. Random forests combine many weak trees to create a "strong learner" that generalizes better. But how many trees do we need? Do more trees always mean better performance, or is there a point of diminishing returns?
 
-**Our Approach:** We'll compare random forests with different numbers of trees against linear regression and individual decision trees to understand the trade-offs between complexity and performance **for this dataset**.
+**Our Approach:** We'll compare random forests with different numbers of trees against linear regression and individual decision trees to understand the trade-offs between complexity and performance for this dataset.
 
-::: {.callout-warning}
-## ⚠️ AI Partnership Required
-
-This challenge pushes boundaries intentionally. You'll tackle problems that normally require weeks of study, but with Cursor AI as your partner (and your brain keeping it honest), you can accomplish more than you thought possible.
-
-**The new reality:** The four stages of competence are Ignorance → Awareness → Learning → Mastery. AI lets us produce Mastery-level work while operating primarily in the Awareness stage. I focus on awareness training, you leverage AI for execution, and together we create outputs that used to require years of dedicated study.
-:::
-
-## Data and Methodology
-
-We analyze the Ames Housing dataset, which contains detailed information about residential properties sold in Ames, Iowa from 2006 to 2010. This dataset is ideal for our analysis because:
-
-- **Anticipated Non-linear Relationships:** Real estate prices have complex, non-linear relationships between features (e.g., square footage in wealthy vs. poor zip codes affects price differently)
-- **Mixed Data Types:** Contains both categorical (zipCode) and numerical variables
-- **Real-world Complexity:** Captures the kind of messy, real-world data where ensemble methods excel
-
-Since we anticipate non-linear relationships, random forests are well-suited to model the relationship between features and sale price.
-
-::: {.panel-tabset}
-
-### R
 
 ```{r}
 #| label: load-and-model-r
-#| echo: true
+#| echo: false
 #| message: false
 #| warning: false
 
@@ -95,73 +58,12 @@ rf_2000 <- randomForest(SalePrice ~ ., data = train_data, ntree = 2000, mtry = 3
 rf_5000 <- randomForest(SalePrice ~ ., data = train_data, ntree = 5000, mtry = 3, seed = 123)
 ```
 
-### Python
-
-```{python}
-#| label: load-and-model-python
-#| echo: true
-
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import mean_squared_error, r2_score
-import warnings
-warnings.filterwarnings('ignore')
-
-# Load data
-sales_data = pd.read_csv("https://raw.githubusercontent.com/flyaflya/buad442Fall2025/refs/heads/main/datasets/salesPriceData.csv")
-
-# Prepare model data
-model_vars = ['SalePrice', 'LotArea', 'YearBuilt', 'GrLivArea', 'FullBath', 
-              'HalfBath', 'BedroomAbvGr', 'TotRmsAbvGrd', 'GarageCars', 'zipCode']
-model_data = sales_data[model_vars].dropna()
-
-# Convert zipCode to categorical variable - important for proper modeling
-model_data['zipCode'] = model_data['zipCode'].astype('category')
-
-# Split data
-X = model_data.drop('SalePrice', axis=1)
-y = model_data['SalePrice']
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=123)
-
-# Build random forests with different numbers of trees (with corrected categorical zipCode)
-rf_1 = RandomForestRegressor(n_estimators=1, max_features=3, random_state=123)
-rf_5 = RandomForestRegressor(n_estimators=5, max_features=3, random_state=123)
-rf_25 = RandomForestRegressor(n_estimators=25, max_features=3, random_state=123)
-rf_100 = RandomForestRegressor(n_estimators=100, max_features=3, random_state=123)
-rf_500 = RandomForestRegressor(n_estimators=500, max_features=3, random_state=123)
-rf_1000 = RandomForestRegressor(n_estimators=1000, max_features=3, random_state=123)
-rf_2000 = RandomForestRegressor(n_estimators=2000, max_features=3, random_state=123)
-rf_5000 = RandomForestRegressor(n_estimators=5000, max_features=3, random_state=123)
-
-# Fit all models
-rf_1.fit(X_train, y_train)
-rf_5.fit(X_train, y_train)
-rf_25.fit(X_train, y_train)
-rf_100.fit(X_train, y_train)
-rf_500.fit(X_train, y_train)
-rf_1000.fit(X_train, y_train)
-rf_2000.fit(X_train, y_train)
-rf_5000.fit(X_train, y_train)
-```
-
-:::
-
 ## Results: The Power of Ensemble Learning
-
-Our analysis reveals a clear pattern: **more trees consistently improve performance**. Let's examine the results and understand why this happens.
-
 ### Performance Trends
-
-::: {.panel-tabset}
-
-### R
 
 ```{r}
 #| label: performance-comparison-r
-#| echo: true
+#| echo: false
 #| message: false
 #| warning: false
 #| fig-width: 10
@@ -228,304 +130,207 @@ performance_df <- data.frame(
 print(performance_df)
 ```
 
-### Python
+## Question 1: The Power of More Trees 
 
-```{python}
-#| label: performance-comparison-python
-#| echo: true
-#| fig-width: 10
-#| fig-height: 6
+**Task:** Create visualizations and analysis to demonstrate the power of ensemble learning. You'll need to create three key components:
 
-# Calculate predictions for test data
-predictions_1_test = rf_1.predict(X_test)
-predictions_5_test = rf_5.predict(X_test)
-predictions_25_test = rf_25.predict(X_test)
-predictions_100_test = rf_100.predict(X_test)
-predictions_500_test = rf_500.predict(X_test)
-predictions_1000_test = rf_1000.predict(X_test)
-predictions_2000_test = rf_2000.predict(X_test)
-predictions_5000_test = rf_5000.predict(X_test)
+```{r}
+#| label: power-of-trees-viz
+#| echo: false
+#| fig-width: 12
+#| fig-height: 8
+#| message: false
+#| warning: false
 
-# Calculate predictions for training data
-predictions_1_train = rf_1.predict(X_train)
-predictions_5_train = rf_5.predict(X_train)
-predictions_25_train = rf_25.predict(X_train)
-predictions_100_train = rf_100.predict(X_train)
-predictions_500_train = rf_500.predict(X_train)
-predictions_1000_train = rf_1000.predict(X_train)
-predictions_2000_train = rf_2000.predict(X_train)
-predictions_5000_train = rf_5000.predict(X_train)
+# Create visualization showing the power of more trees
+library(ggplot2)
+library(gridExtra)
 
-# Calculate performance metrics for test data
-rmse_1_test = np.sqrt(mean_squared_error(y_test, predictions_1_test))
-rmse_5_test = np.sqrt(mean_squared_error(y_test, predictions_5_test))
-rmse_25_test = np.sqrt(mean_squared_error(y_test, predictions_25_test))
-rmse_100_test = np.sqrt(mean_squared_error(y_test, predictions_100_test))
-rmse_500_test = np.sqrt(mean_squared_error(y_test, predictions_500_test))
-rmse_1000_test = np.sqrt(mean_squared_error(y_test, predictions_1000_test))
-rmse_2000_test = np.sqrt(mean_squared_error(y_test, predictions_2000_test))
-rmse_5000_test = np.sqrt(mean_squared_error(y_test, predictions_5000_test))
+# Prepare data for plotting
+plot_data <- performance_df %>%
+  pivot_longer(cols = c(RMSE_Test, RMSE_Train), 
+               names_to = "Dataset", 
+               values_to = "RMSE") %>%
+  mutate(Dataset = ifelse(Dataset == "RMSE_Test", "Test Data", "Training Data"))
 
-# Calculate performance metrics for training data
-rmse_1_train = np.sqrt(mean_squared_error(y_train, predictions_1_train))
-rmse_5_train = np.sqrt(mean_squared_error(y_train, predictions_5_train))
-rmse_25_train = np.sqrt(mean_squared_error(y_train, predictions_25_train))
-rmse_100_train = np.sqrt(mean_squared_error(y_train, predictions_100_train))
-rmse_500_train = np.sqrt(mean_squared_error(y_train, predictions_500_train))
-rmse_1000_train = np.sqrt(mean_squared_error(y_train, predictions_1000_train))
-rmse_2000_train = np.sqrt(mean_squared_error(y_train, predictions_2000_train))
-rmse_5000_train = np.sqrt(mean_squared_error(y_train, predictions_5000_train))
+# RMSE plot
+p1 <- ggplot(plot_data, aes(x = Trees, y = RMSE, color = Dataset)) +
+  geom_line(size = 1.2) +
+  geom_point(size = 2) +
+  scale_x_log10() +
+  labs(title = "RMSE vs Number of Trees",
+       subtitle = "Lower RMSE indicates better performance",
+       x = "Number of Trees (log scale)",
+       y = "Root Mean Square Error",
+       color = "Dataset") +
+  theme_minimal() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(size = 14, face = "bold"),
+        plot.subtitle = element_text(size = 12))
 
-r2_1 = r2_score(y_test, predictions_1_test)
-r2_5 = r2_score(y_test, predictions_5_test)
-r2_25 = r2_score(y_test, predictions_25_test)
-r2_100 = r2_score(y_test, predictions_100_test)
-r2_500 = r2_score(y_test, predictions_500_test)
-r2_1000 = r2_score(y_test, predictions_1000_test)
-r2_2000 = r2_score(y_test, predictions_2000_test)
-r2_5000 = r2_score(y_test, predictions_5000_test)
+# R-squared plot
+p2 <- ggplot(performance_df, aes(x = Trees, y = R_squared)) +
+  geom_line(size = 1.2, color = "darkblue") +
+  geom_point(size = 2, color = "darkblue") +
+  scale_x_log10() +
+  labs(title = "R-squared vs Number of Trees",
+       subtitle = "Higher R-squared indicates better model fit",
+       x = "Number of Trees (log scale)",
+       y = "R-squared") +
+  theme_minimal() +
+  theme(plot.title = element_text(size = 14, face = "bold"),
+        plot.subtitle = element_text(size = 12))
 
-# Create performance comparison
-performance_data = {
-    'Trees': [1, 5, 25, 100, 500, 1000, 2000, 5000],
-    'RMSE_Test': [rmse_1_test, rmse_5_test, rmse_25_test, rmse_100_test, rmse_500_test, rmse_1000_test, rmse_2000_test, rmse_5000_test],
-    'RMSE_Train': [rmse_1_train, rmse_5_train, rmse_25_train, rmse_100_train, rmse_500_train, rmse_1000_train, rmse_2000_train, rmse_5000_train],
-    'R_squared': [r2_1, r2_5, r2_25, r2_100, r2_500, r2_1000, r2_2000, r2_5000]
-}
-
-performance_df = pd.DataFrame(performance_data)
-print(performance_df)
+# Combine plots
+grid.arrange(p1, p2, ncol = 2)
 ```
 
-:::
+**Analysis of the Power of More Trees:**
 
-## Student Analysis Section: The Power of More Trees {#student-analysis-section}
+The visualization reveals several key insights about ensemble learning. This first being that there is dramitic early improvements. This can be seen through the most significant performance gains occuring in the first 25 trees. There is a 32% RMSE improvement from 1 tree to 25 trees. This means that the model is able to explain 32% more of the variance in the data with 25 trees than with 1 tree (predictions are closer to the actual values). This can also be seen in the R-squared, which jumps from 0.65 to 0.85, showing an incraese in explanitory power as the number of trees increases. After 25 trees, the improvements become much more modest. Moving from 25 to 100 trees only reduces RMSE by about $1,000 (3% improvement), and from 100 to 1000 trees by less than $500 (1.5% improvement). This demonstrates the classic pattern of diminishing returns in ensemble methods. This is a result of the bootstrap sampling and random feature selection that are used to build the trees. As the number of trees increases, the trees become more and more similar, and the performance gains decrease (less new information as the forest grows).
 
-**Your Task:** Create visualizations and analysis to demonstrate the power of ensemble learning. You'll need to create three key components:
+## Question 2: Overfitting Visualization and Analysis
 
-### 1. The Power of More Trees Visualization
+**Task:** Compare decision trees vs random forests in terms of overfitting.
 
-**Create a visualization showing:**
-- RMSE vs Number of Trees (both training and test data)
-- R-squared vs Number of Trees
-- Do not `echo` the code that creates the visualization
+```{r}
+#| label: overfitting-analysis
+#| echo: false
+#| fig-width: 14
+#| fig-height: 8
+#| message: false
+#| warning: false
 
-**Add Brief Discussion of the Visualization**
-- Discuss where the most dramatic improvement in performance occurs as you add more trees, how dramatic is it?
-- Discuss diminishing returns as you add more trees
+# Create decision trees with different max depths to show overfitting
+library(rpart)
 
-::: {.callout-important}
-## 📊 Visualization Requirements
+# Function to calculate RMSE
+calculate_rmse <- function(actual, predicted) {
+  sqrt(mean((actual - predicted)^2))
+}
 
-Create two plots:
-1. **RMSE Plot:** Show how RMSE decreases with more trees (both training and test)
-2. **R-squared Plot:** Show how R-squared increases with more trees
+# Test different max depths for decision trees
+max_depths <- c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+tree_rmse_train <- numeric(length(max_depths))
+tree_rmse_test <- numeric(length(max_depths))
 
-Use log scale on x-axis to better show the relationship across the range of tree counts.
-:::
+for (i in 1:length(max_depths)) {
+  # Build decision tree with specific max depth
+  tree_model <- rpart(SalePrice ~ ., data = train_data, 
+                      control = rpart.control(maxdepth = max_depths[i]))
+  
+  # Calculate predictions
+  train_pred <- predict(tree_model, train_data)
+  test_pred <- predict(tree_model, test_data)
+  
+  # Calculate RMSE
+  tree_rmse_train[i] <- calculate_rmse(train_data$SalePrice, train_pred)
+  tree_rmse_test[i] <- calculate_rmse(test_data$SalePrice, test_pred)
+}
 
-### 2. Overfitting Visualization and Analysis
+# Create data frames for plotting
+tree_data <- data.frame(
+  Complexity = max_depths,
+  RMSE_Train = tree_rmse_train,
+  RMSE_Test = tree_rmse_test
+)
 
-**Your Task:** Compare decision trees vs random forests in terms of overfitting.
+rf_data <- performance_df %>%
+  select(Trees, RMSE_Train, RMSE_Test) %>%
+  rename(Complexity = Trees)
 
-**Create one visualization with two side-by-side plots showing:**
-- Decision trees: How performance changes with tree complexity (max depth)
-- Random forests: How performance changes with number of trees
+# Create side-by-side plots
+library(gridExtra)
 
-**Your analysis should explain:**
-- Why individual decision trees overfit as they become more complex
-- Why random forests don't suffer from the same overfitting problem
-- The mechanisms that prevent overfitting in random forests (bootstrap sampling, random feature selection, averaging)
+# Decision tree plot
+p_tree <- ggplot(tree_data, aes(x = Complexity)) +
+  geom_line(aes(y = RMSE_Train, color = "Training"), size = 1.2) +
+  geom_line(aes(y = RMSE_Test, color = "Test"), size = 1.2) +
+  geom_point(aes(y = RMSE_Train, color = "Training"), size = 2) +
+  geom_point(aes(y = RMSE_Test, color = "Test"), size = 2) +
+  labs(title = "Decision Trees: Overfitting with Complexity",
+       subtitle = "Training performance improves while test performance degrades",
+       x = "Max Depth",
+       y = "RMSE",
+       color = "Dataset") +
+  theme_minimal() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(size = 14, face = "bold"),
+        plot.subtitle = element_text(size = 12)) +
+  scale_color_manual(values = c("Training" = "blue", "Test" = "red"))
 
-::: {.callout-important}
-## 📊 Overfitting Analysis Requirements
+# Random forest plot
+p_rf <- ggplot(rf_data, aes(x = Complexity)) +
+  geom_line(aes(y = RMSE_Train, color = "Training"), size = 1.2) +
+  geom_line(aes(y = RMSE_Test, color = "Test"), size = 1.2) +
+  geom_point(aes(y = RMSE_Train, color = "Training"), size = 2) +
+  geom_point(aes(y = RMSE_Test, color = "Test"), size = 2) +
+  scale_x_log10() +
+  labs(title = "Random Forests: No Overfitting with More Trees",
+       subtitle = "Both training and test performance improve together",
+       x = "Number of Trees (log scale)",
+       y = "RMSE",
+       color = "Dataset") +
+  theme_minimal() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(size = 14, face = "bold"),
+        plot.subtitle = element_text(size = 12)) +
+  scale_color_manual(values = c("Training" = "blue", "Test" = "red"))
 
-Create a side-by-side comparison showing:
-1. **Decision Trees:** Training vs Test RMSE as max depth increases (showing overfitting)
-2. **Random Forests:** Training vs Test RMSE as number of trees increases (no overfitting)
+# Combine plots
+grid.arrange(p_tree, p_rf, ncol = 2)
+```
 
-- Use the same y-axis limits for both side-by-side plots so it clearly shows whether random forests outperform decision trees.
-- Do not `echo` the code that creates the visualization
-:::
+**Analysis of Overfitting in Decision Trees vs Random Forests:**
 
-### 3. Linear Regression vs Random Forest Comparison
+Decision Trees Suffer from overfitting, espeically as they become more complex. As individual decision trees become more complex (higher max depth), they show a classic overfitting pattern. Training RMSE continues to improve, reaching very low values, while test RMSE actually gets worse after depth 4-5. This happens because individual trees memorize the training data rather than learning generalizable patterns. When these trees memorize the training data, they are no longer able to generalize to new data, and the performance on the test data suffers which causes the overfitting.
+
+Random forests on the other hand, do not suffer from overfitting. They do this by aggregating diverse trees and introducing "controlled randomness" that prevents any single tree from memorizing the training data. This is why random forests are able to generalize better to new data, and why they are able to improve performance as the number of trees increases. Specifically, bootstrap sampling trains each tree on a different random sample, preventing any single tree from memorizing the entire dataset. Also, the random feature selection only considers a random subset of features at each split, forcing trees to learn different patterns and reducing correlation between trees. On top of this, by averaging predictions from many diverse trees, random forests smooth out individual tree biases and reduce variance. The randomness acts as a natural form of regularization, preventing the model from fitting noise in the training data.
+
+## Question 3: Linear Regression vs Random Forest Comparison
 
 **Your Task:** Compare random forests to linear regression baseline.
 
-**Create a comparison table showing:**
-- Linear Regression RMSE
-- Random Forest (1 tree) RMSE  
-- Random Forest (100 trees) RMSE
-- Random Forest (1000 trees) RMSE
+```{r}
+#| label: linear-regression-comparison
+#| echo: false
+#| message: false
+#| warning: false
 
-**Your analysis should address:**
-- The improvement in RMSE when going from 1 tree to 100 trees
-- Whether switching from linear regression to 100-tree random forest shows similar improvement
-- When random forests are worth the added complexity vs linear regression
-- The trade-offs between interpretability and performance
+# Build linear regression model
+lm_model <- lm(SalePrice ~ ., data = train_data)
+lm_predictions <- predict(lm_model, test_data)
+lm_rmse <- sqrt(mean((test_data$SalePrice - lm_predictions)^2))
 
-::: {.callout-important}
-## 📊 Comparison Requirements
+# Get RMSE values for specific random forest models
+rf_1_rmse <- performance_df$RMSE_Test[performance_df$Trees == 1]
+rf_100_rmse <- performance_df$RMSE_Test[performance_df$Trees == 100]
+rf_1000_rmse <- performance_df$RMSE_Test[performance_df$Trees == 1000]
 
-Create a clear table comparing:
+# Calculate percentage improvements over linear regression
+rf_1_improvement <- ((lm_rmse - rf_1_rmse) / lm_rmse) * 100
+rf_100_improvement <- ((lm_rmse - rf_100_rmse) / lm_rmse) * 100
+rf_1000_improvement <- ((lm_rmse - rf_1000_rmse) / lm_rmse) * 100
 
-- Linear Regression
-- Random Forest (1 tree)
-- Random Forest (100 trees) 
-- Random Forest (1000 trees)
+# Create comparison table
+comparison_table <- data.frame(
+  Model = c("Linear Regression", "Random Forest (1 tree)", "Random Forest (100 trees)", "Random Forest (1000 trees)"),
+  RMSE = c(lm_rmse, rf_1_rmse, rf_100_rmse, rf_1000_rmse),
+  Improvement_over_LR = c("Baseline", paste0(round(rf_1_improvement, 1), "%"), 
+                          paste0(round(rf_100_improvement, 1), "%"), 
+                          paste0(round(rf_1000_improvement, 1), "%")),
+  Complexity = c("Low", "Low", "Medium", "High"),
+  Interpretability = c("High", "High", "Low", "Low")
+)
 
-Include percentage improvements over linear regression for each random forest model.
-:::
+# Display the table
+knitr::kable(comparison_table, 
+              caption = "Model Performance Comparison: Linear Regression vs Random Forests",
+              col.names = c("Model", "RMSE", "Improvement over Linear Regression", "Complexity", "Interpretability"),
+              digits = 0)
+```
 
-## Challenge Requirements 📋
+**Analysis of Linear Regression vs Random Forest Performance:**
 
-### Minimum Requirements for Any Points on Challenge
-
-1. **Create a GitHub Pages Site:** Use the starter repository (see Repository Setup section below) to begin with a working template. The repository includes all the analysis code and visualizations above.  Use just one language for the analysis and visualizations, delete the other language and omit the panel tabsets.
-
-2. **Add Analysis and Visualizations:** Complete the three analysis sections above with your own code and insights.
-
-3. **GitHub Repository:** Use your forked repository (from the starter repository) named "randomForestChallenge" in your GitHub account.
-
-4. **GitHub Pages Setup:** The repository should be made the source of your github pages:
-
-   - Go to your repository settings (click the "Settings" tab in your GitHub repository)
-   - Scroll down to the "Pages" section in the left sidebar
-   - Under "Source", select "Deploy from a branch"
-   - Choose "main" branch and "/ (root)" folder
-   - Click "Save"
-   - Your site will be available at: `https://[your-username].github.io/randomForestChallenge/`
-   - **Note:** It may take a few minutes for the site to become available after enabling Pages
-
-## Getting Started: Repository Setup 🚀
-
-::: {.callout-important}
-## 📁 Quick Start with Starter Repository
-
-**Step 1:** Fork the starter repository to your github account at [https://github.com/flyaflya/randomForestChallenge.git](https://github.com/flyaflya/randomForestChallenge.git)
-
-**Step 2:** Clone your fork locally using Cursor (or VS Code)
-
-**Step 3:** You're ready to start! The repository includes pre-loaded data and a working template with all the analysis above.
-:::
-
-::: {.callout-tip}
-## 💡 Why Use the Starter Repository?
-
-**Benefits:**
-
-- **Pre-loaded data:** All required data and analysis code is included
-- **Working template:** Basic Quarto structure (`index.qmd`) is ready
-- **No setup errors:** Avoid common data loading issues
-- **Focus on analysis:** Spend time on the visualizations and analysis, not data preparation
-:::
-
-### Getting Started Tips
-
-::: {.callout-note}
-## 🎯 Navy SEALs Motto
-
-> "Slow is Smooth and Smooth is Fast"
-
-*Take your time to understand the random forest mechanics, plan your approach carefully, and execute with precision. Rushing through this challenge will only lead to errors and confusion.*
-:::
-
-::: {.callout-warning}
-## 💾 Important: Save Your Work Frequently!
-
-**Before you start:** Make sure to commit your work often using the Source Control panel in Cursor (Ctrl+Shift+G or Cmd+Shift+G). This prevents the AI from overwriting your progress and ensures you don't lose your work.
-
-**Commit after each major step:**
-
-- After adding your visualizations
-- After adding your analysis
-- After rendering to HTML
-- Before asking the AI for help with new code
-
-**How to commit:**
-
-1. Open Source Control panel (Ctrl+Shift+G)
-2. Stage your changes (+ button)
-3. Write a descriptive commit message
-4. Click the checkmark to commit
-
-*Remember: Frequent commits are your safety net!*
-:::
-
-## Grading Rubric 🎓
-
-::: {.callout-important}
-## 📊 What You're Really Being Graded On
-
-**This is an investigative report, not a coding exercise.** You're analyzing random forest models and reporting your findings like a professional analyst would. Think of this as a brief you'd write for a client or manager about the power of ensemble learning and when to use random forests vs simpler approaches.
-
-**What makes a great report:**
-
-- **Clear narrative:** Tell the story of what you discovered about ensemble learning
-- **Insightful analysis:** Focus on the most interesting findings about random forest performance
-- **Professional presentation:** Clean, readable, and engaging
-- **Concise conclusions:** No AI babble or unnecessary technical jargon
-- **Human insights:** Your interpretation of what the performance improvements actually mean
-- **Practical implications:** When random forests are worth the added complexity
-
-**What we're looking for:** A compelling 2-3 minute read that demonstrates both the power of ensemble learning and the importance of choosing the right tool for the job.
-:::
-
-### Questions to Answer for 75% Grade on Challenge
-
-1. **Power of More Trees Analysis:** Provide a clear, well-reasoned analysis of how random forest performance improves with more trees. Your analysis should demonstrate understanding of ensemble learning principles and diminishing returns.
-
-### Questions to Answer for 85% Grade on Challenge
-
-2. **Overfitting Analysis:** Provide a thorough analysis comparing decision trees vs random forests in terms of overfitting. Your analysis should explain why individual trees overfit while random forests don't, and the mechanisms that prevent overfitting in ensemble methods.
-
-### Questions to Answer for 95% Grade on Challenge
-
-3. **Linear Regression Comparison:** Your analysis should include a clear comparison table and discussion of when random forests are worth the added complexity vs linear regression. Focus on practical implications for real-world applications.
-
-### Questions to Answer for 100% Grade on Challenge
-
-4. **Professional Presentation:** Your analysis should be written in a professional, engaging style that would be appropriate for a business audience. Use clear visualizations and focus on practical insights rather than technical jargon.
-
-## Submission Checklist ✅
-
-**Minimum Requirements (Required for Any Points):**
-
-- [ ] Forked starter repository from [https://github.com/flyaflya/randomForestChallenge.git](https://github.com/flyaflya/randomForestChallenge.git)
-- [ ] Cloned repository locally using Cursor (or VS Code)
-- [ ] Completed all three analysis sections with visualizations
-- [ ] Document rendered to HTML successfully
-- [ ] HTML files uploaded to your forked repository
-- [ ] GitHub Pages enabled and working
-- [ ] Site accessible at `https://[your-username].github.io/randomForestChallenge/`
-
-**75% Grade Requirements:**
-
-- [ ] Clear analysis of how random forest performance improves with more trees
-- [ ] Discussion of diminishing returns in ensemble learning
-
-**85% Grade Requirements:**
-
-- [ ] Thorough overfitting analysis comparing decision trees vs random forests
-- [ ] Explanation of mechanisms that prevent overfitting in random forests
-
-**95% Grade Requirements:**
-
-- [ ] Complete linear regression comparison with clear table
-- [ ] Discussion of when random forests are worth the complexity
-
-**100% Grade Requirements:**
-
-- [ ] Professional presentation style appropriate for business audience
-- [ ] Clear, engaging narrative that tells a compelling story
-- [ ] Practical insights that would help a real data scientist
-
-**Report Quality (Critical for Higher Grades):**
-
-- [ ] Clear, engaging narrative that tells a story
-- [ ] Focus on the most interesting findings about ensemble learning
-- [ ] Professional writing style (no AI-generated fluff)
-- [ ] Concise analysis that gets to the point
-- [ ] Practical insights that would help a real data scientist
-- [ ] Well-designed visualizations that support your analysis
+When we go from 1 tree to 100 trees, we see a significant improvement in the RMSE. The RMSE drops from $47,234 to $33,300, a 29.5% improvement. This means that the model is able to explain 29.5% more of the variance in the data with 100 trees than with 1 tree (predictions are closer to the actual values). Switching from linear regression to 100-tree random forest shows similar improvements, with a 27.4% improvement in RMSE from $45,891 to $33,300. This suggests that the ensemble effect is the primary driver of performance gains. Random forests are worth the complexity when non-linear relationships are suspected, feature interactions are important, performance is critical, and black box predictions are acceptable. You should stick with linear regression when interpretability is crucial (business decisions), computational resources are limited, and quick prototyping is needed. There are also some trade-offs to consider. Random forests are a black box model, meaning that it is difficult to understand how the model is making predictions. There are also more hyperparameters to tune and a more complex deployment. However, they do does have stronger accuracy. Linear regression is a more interpretable model, meaning that it is easier to understand how the model is making predictions since it is a fairly simple deployment and minimal tuning is needed. However it does have weaker accuracy. Overall, the decision should be based on the specific needs of the problem and the trade-offs between interpretability and accuracy.
 
